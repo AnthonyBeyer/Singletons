@@ -6,9 +6,9 @@ public class MoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance = null;
     private static object _lock = new object();
-    private static bool isShuttingDown;
-    private static bool shouldSelfCreate;
-    private bool isCreated;
+    private static bool isShuttingDown = false;
+    private static bool shouldSelfCreate = false;
+    private bool isCreated = false;
 
     public static T Instance
     {
@@ -51,12 +51,10 @@ public class MoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         if(_instance == null) 
         { 
-            // Instance was already in scene on Awake
             _instance = this as T; 
         }
         else
         {
-            // Duplicate Singleton
             if (_instance != this as T)
             {
                 if (Application.isPlaying)
@@ -84,7 +82,6 @@ public class MoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             Create();
             isCreated = true;
-            shouldSelfCreate = true;
         }
     }
 
@@ -97,7 +94,7 @@ public class MoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 
     /// <summary>
-    /// Use this to add additional components and setup singleton just before the first Awake firt Init (this is private)
+    /// Override this to add additional components/prefabs/stuff and setup singleton just before the first Awake/Init
     /// </summary>
     protected virtual void Create()
     {
